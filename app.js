@@ -58,6 +58,7 @@ const state = {
   subcategory: "",
   sort: "desc",
   focusField: "产品形态",
+  viewMode: "grouped",
   visibleCount: PAGE_SIZE,
 };
 
@@ -89,6 +90,7 @@ function cacheElements() {
   els.subcategoryFilter = document.querySelector("#subcategoryFilter");
   els.sortSelect = document.querySelector("#sortSelect");
   els.focusControl = document.querySelector("#focusControl");
+  els.viewModeToggle = document.querySelector("#viewModeToggle");
   els.clearFilters = document.querySelector("#clearFilters");
   els.categoryTree = document.querySelector("#categoryTree");
   els.resultInfo = document.querySelector("#resultInfo");
@@ -132,6 +134,12 @@ function bindEvents() {
     if (!button) return;
     state.focusField = button.dataset.focusField;
     syncFocusButtons();
+    renderCards();
+  });
+
+  els.viewModeToggle.addEventListener("click", () => {
+    state.viewMode = state.viewMode === "grouped" ? "merged" : "grouped";
+    syncViewModeToggle();
     renderCards();
   });
 
@@ -445,6 +453,7 @@ function buildResultInfo(shownCount) {
 function createCard(item) {
   const card = document.createElement("article");
   card.className = "case-card";
+  card.classList.toggle("merged-view", state.viewMode === "merged");
   card.classList.toggle("field-focus-active", Boolean(state.focusField));
   card.style.setProperty("--category-color", getCategoryColor(item["大分类"]));
   card.style.setProperty("--accent", getCategoryColor(item["大分类"]));
@@ -461,12 +470,16 @@ function createCard(item) {
   title.textContent = item["案例/来源"];
   card.append(title);
 
-  const fields = document.createElement("dl");
-  fields.className = "field-list";
-  getBodyFieldOrder().forEach((column) => {
-    fields.append(createField(column, item[column]));
-  });
-  card.append(fields);
+  if (state.viewMode === "merged") {
+    card.append(createMergedSummary(item));
+  } else {
+    const fields = document.createElement("dl");
+    fields.className = "field-list";
+    getBodyFieldOrder().forEach((column) => {
+      fields.append(createField(column, item[column]));
+    });
+    card.append(fields);
+  }
 
   if (item["证据/备注"]) {
     const detail = document.createElement("details");
@@ -538,6 +551,22 @@ function createField(column, value) {
   return wrapper;
 }
 
+function createMergedSummary(item) {
+  const summary = document.createElement("p");
+  summary.className = "merged-summary";
+  summary.textContent = [
+    `它的产品形态是${valueOrUnknown(item["产品形态"])}`,
+    `定价策略是${valueOrUnknown(item["定价策略"])}`,
+    `付费模型是${valueOrUnknown(item["付费模型"])}`,
+    `复购机制是${valueOrUnknown(item["复购机制"])}`,
+  ].join("，") + "。";
+  return summary;
+}
+
+function valueOrUnknown(value) {
+  return cleanText(value) || "未填写";
+}
+
 function splitFieldTokens(text) {
   if (!text || text.length > 260) return [];
   return text
@@ -551,6 +580,13 @@ function syncFocusButtons() {
   els.focusControl.querySelectorAll("[data-focus-field]").forEach((button) => {
     button.classList.toggle("active", button.dataset.focusField === state.focusField);
   });
+}
+
+function syncViewModeToggle() {
+  const isMerged = state.viewMode === "merged";
+  els.viewModeToggle.setAttribute("aria-pressed", String(isMerged));
+  els.viewModeToggle.querySelector("[data-mode-label]").textContent = isMerged ? "合并模式" : "分组模式";
+  els.viewModeToggle.querySelector("small").textContent = isMerged ? "切换分组" : "切换合并";
 }
 
 function getBodyFieldOrder() {

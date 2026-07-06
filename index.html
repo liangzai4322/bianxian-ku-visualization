@@ -4,10 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>变现库可视化</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260706-viewmode" />
     <script src="data-20260704-130112.js" defer></script>
     <script src="loader.js" defer></script>
-    <script src="app.js" defer></script>
+    <script src="app.js?v=20260706-viewmode" defer></script>
   </head>
   <body>
     <div class="app-shell">
@@ -15,6 +15,13 @@
         <div class="brand">
           <p class="eyebrow">Visualization</p>
           <h1>变现库</h1>
+        </div>
+        <div class="view-switch" aria-label="视图模式">
+          <span>视图</span>
+          <button id="viewModeToggle" class="view-mode-toggle" type="button" aria-pressed="false">
+            <b data-mode-label>分组模式</b>
+            <small>切换合并</small>
+          </button>
         </div>
         <div class="summary" aria-live="polite">
           <span id="totalCount">0</span>
