@@ -502,6 +502,7 @@ function renderCards() {
 function createCard(item) {
   const card = document.createElement("article");
   card.className = "case-card";
+  card.dataset.caseRecord = String(item[RAW_INDEX_FIELD]);
   card.classList.toggle("merged-view", state.viewMode === "merged");
   const categoryStats = state.categoryStats.get(item[CATEGORY_FIELD]);
   card.style.setProperty("--category-color", categoryStats?.color || LIBRARY_CONFIG.theme.accent);

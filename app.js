@@ -573,6 +573,7 @@ function updateCaseHeader(caseCount) {
 function createCaseCard(record) {
   const card = document.createElement("article");
   card.className = "case-card field-focus-active";
+  card.dataset.caseRecord = String(record.sourceIndex);
   const categoryColor = getCategoryColor(record.category);
   card.style.setProperty("--category-color", categoryColor);
   card.style.setProperty("--accent", categoryColor);

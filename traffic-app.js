@@ -459,6 +459,7 @@ function buildResultInfo(shownCount) {
 function createCard(item) {
   const card = document.createElement("article");
   card.className = "case-card";
+  card.dataset.caseRecord = String(item[RAW_INDEX_FIELD]);
   card.classList.toggle("merged-view", state.viewMode === "merged");
   card.classList.toggle("field-focus-active", Boolean(state.focusField));
   card.style.setProperty("--category-color", getCategoryColor(item["大分类"]));
