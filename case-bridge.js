@@ -5,6 +5,14 @@
   const currentLibrary = script?.dataset.library || "";
   const detailsSource = script?.dataset.detailsSrc || "case-graph-details.js";
   const caseMap = window.__CASE_MAP__;
+  const matchLabels = Object.freeze({
+    "relative-path-exact-title": "同源路径 · 标题一致",
+    "relative-path-token-overlap": "同源路径 · 关键词匹配",
+    "source-file-exact-title": "同名文件 · 标题一致",
+    "source-file-token-overlap": "同名文件 · 关键词匹配",
+    "title-only-exact": "标题一致",
+    "single-library": "当前仅在一个库中收录",
+  });
 
   if (!script || !caseMap?.libraries?.[currentLibrary]) return;
 
@@ -195,10 +203,7 @@
     elements.title.textContent = entity.title;
     elements.status.replaceChildren(
       createText("strong", `已覆盖 ${availableCount}/6 个维度`),
-      createText(
-        "span",
-        entity.confidence === "exact-normalized-title" ? "确定性标题匹配" : "当前仅在一个库中收录"
-      )
+      createText("span", formatMatchLabel(entity))
     );
     elements.status.classList.remove("is-error");
 
@@ -368,6 +373,12 @@
       number >>>= 1;
     }
     return count;
+  }
+
+  function formatMatchLabel(entity) {
+    const label = matchLabels[entity.confidence] || "来源与标题联合匹配";
+    if (!entity.confidence?.includes("token-overlap") || !entity.matchScore) return label;
+    return `${label} ${Math.round(entity.matchScore * 100)}%`;
   }
 
   function nextPaint() {
