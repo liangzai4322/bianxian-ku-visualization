@@ -3,99 +3,143 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>变现库可视化</title>
-    <link rel="stylesheet" href="styles.css?v=20260706-viewmode" />
-    <script src="data-20260704-130112.js" defer></script>
-    <script src="loader.js" defer></script>
-    <script src="app.js?v=20260706-viewmode" defer></script>
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:," />
+    <title>商业模式账本 · 变现库</title>
+    <link rel="stylesheet" href="styles.css?v=20260713-pattern-ledger" />
+    <script src="monetization-patterns.js?v=20260713" defer></script>
+    <script src="app.js?v=20260713-pattern-ledger" defer></script>
   </head>
-  <body>
+  <body data-focus-theme="product">
+    <a class="skip-link" href="#mainContent">跳到主要内容</a>
+
     <div class="app-shell">
-      <header class="topbar">
-        <div class="brand">
-          <p class="eyebrow">Visualization</p>
-          <h1>变现库</h1>
+      <header class="site-header">
+        <div class="brand-block">
+          <p class="brand-label">变现库 · 模式研究工具</p>
+          <h1>商业模式账本</h1>
+          <p>先查看高频模式，再进入案例核对原始描述。</p>
         </div>
-        <div class="view-switch" aria-label="视图模式">
-          <span>视图</span>
-          <button id="viewModeToggle" class="view-mode-toggle" type="button" aria-pressed="false">
-            <b data-mode-label>分组模式</b>
-            <small>切换合并</small>
-          </button>
-        </div>
-        <div class="summary" aria-live="polite">
-          <span id="totalCount">0</span>
-          <span>条案例</span>
+        <div class="record-total" aria-live="polite">
+          <strong id="totalCount">0</strong>
+          <span>条案例索引</span>
         </div>
       </header>
 
-      <section class="toolbar" aria-label="筛选工具">
-        <label class="search-box">
-          <span>搜索</span>
-          <input id="searchInput" type="search" placeholder="案例、产品、定价、付费模型..." autocomplete="off" />
-        </label>
+      <nav class="library-nav" aria-label="六库导航">
+        <a class="active" href="index.html" aria-current="page">变现</a>
+        <a href="traffic-index.html">流量</a>
+        <a href="marketing-index.html">营销</a>
+        <a href="demand/index.html">需求</a>
+        <a href="case/index.html">案例</a>
+        <a href="barrier/index.html">壁垒</a>
+      </nav>
 
-        <label>
-          <span>大分类</span>
-          <select id="categoryFilter"></select>
-        </label>
+      <details id="filterPanel" class="filter-panel">
+        <summary>筛选与排序</summary>
+        <div class="filter-grid">
+          <label class="search-field">
+            <span>搜索</span>
+            <input id="searchInput" type="search" placeholder="案例、分类或规范标签" autocomplete="off" />
+          </label>
 
-        <label>
-          <span>细分赛道</span>
-          <select id="subcategoryFilter"></select>
-        </label>
+          <label>
+            <span>一级分类</span>
+            <select id="categoryFilter" aria-label="一级分类"></select>
+          </label>
 
-        <label>
-          <span>排序</span>
-          <select id="sortSelect">
-            <option value="desc">最新在前</option>
-            <option value="asc">最旧在前</option>
-          </select>
-        </label>
+          <label>
+            <span>细分类别</span>
+            <select id="subcategoryFilter" aria-label="细分类别" disabled>
+              <option value="">请先选择一级分类</option>
+            </select>
+          </label>
 
-        <div class="focus-panel" aria-label="字段聚焦">
-          <span>聚焦字段</span>
-          <div id="focusControl" class="segment-control" role="group" aria-label="字段聚焦">
-            <button type="button" data-focus-field="">全部</button>
-            <button class="active field-product-control" type="button" data-focus-field="产品形态">产品形态</button>
-            <button class="field-price-control" type="button" data-focus-field="定价策略">定价策略</button>
-            <button class="field-model-control" type="button" data-focus-field="付费模型">付费模型</button>
-            <button class="field-repeat-control" type="button" data-focus-field="复购机制">复购机制</button>
-          </div>
+          <label>
+            <span>日期排序</span>
+            <select id="sortSelect" aria-label="日期排序">
+              <option value="desc">最新在前</option>
+              <option value="asc">最旧在前</option>
+            </select>
+          </label>
+
+          <fieldset class="focus-fieldset">
+            <legend>重点显示字段</legend>
+            <div id="focusControl" class="focus-control">
+              <button class="active field-product-control" type="button" data-focus-field="产品形态" aria-pressed="true">产品形态</button>
+              <button class="field-price-control" type="button" data-focus-field="定价策略" aria-pressed="false">定价策略</button>
+              <button class="field-model-control" type="button" data-focus-field="付费模型" aria-pressed="false">付费模型</button>
+              <button class="field-repeat-control" type="button" data-focus-field="复购机制" aria-pressed="false">复购机制</button>
+            </div>
+          </fieldset>
+
+          <button id="resetFilters" class="secondary-button reset-button" type="button">清空筛选</button>
         </div>
-      </section>
+      </details>
 
-      <div class="content-layout">
-        <aside class="sidebar" aria-label="分类导航">
-          <div class="sidebar-head">
-            <h2>分类导航</h2>
-            <button id="clearFilters" class="ghost-button" type="button">全部</button>
+      <main id="mainContent" class="main-content">
+        <div class="workbench-bar">
+          <div id="viewControl" class="view-control" role="group" aria-label="视图切换">
+            <button class="active" type="button" data-view="patterns" aria-pressed="true">模式视图</button>
+            <button type="button" data-view="cases" aria-pressed="false">案例视图</button>
           </div>
-          <nav id="categoryTree" class="category-tree"></nav>
-        </aside>
+          <p id="resultInfo" class="result-info" aria-live="polite">正在加载轻量模式索引...</p>
+        </div>
 
-        <main class="main-content">
-          <div class="result-bar">
-            <p id="resultInfo">正在加载...</p>
+        <section id="loadingState" class="state-panel" aria-live="polite">
+          <strong>正在加载模式索引</strong>
+          <span>首屏不会读取完整案例详情。</span>
+        </section>
+
+        <section id="patternView" class="pattern-view" aria-labelledby="patternHeading" hidden>
+          <header class="section-heading">
+            <div>
+              <p class="section-label">规则归一化</p>
+              <h2 id="patternHeading"><span id="focusFieldName">产品形态</span>模式排行</h2>
+              <p>按命中案例数排序；一条案例可能命中多个规则标签。</p>
+            </div>
+            <div class="coverage-block">
+              <span>全库规则覆盖率</span>
+              <strong id="coverageValue">0%</strong>
+            </div>
+          </header>
+
+          <div class="pattern-table-head" aria-hidden="true">
+            <span>模式</span>
+            <span>案例数与占比</span>
+            <span>主要一级分类</span>
+            <span>代表案例</span>
+            <span></span>
           </div>
+          <ol id="patternList" class="pattern-list" aria-live="polite"></ol>
+        </section>
 
-          <section id="cardGrid" class="card-grid" aria-live="polite"></section>
+        <section id="caseView" class="case-view" aria-labelledby="caseHeading" hidden>
+          <header class="case-view-head">
+            <div>
+              <p class="section-label">案例下钻</p>
+              <h2 id="caseHeading">案例视图</h2>
+              <p id="activePatternText">当前显示筛选范围内的全部案例。</p>
+            </div>
+            <button id="backToPatterns" class="secondary-button" type="button">回到全部模式</button>
+          </header>
 
-          <div id="emptyState" class="empty-state" hidden>
-            <h2>没有匹配结果</h2>
-            <p>换一个关键词或清空筛选后再看。</p>
-          </div>
-
-          <div id="errorState" class="empty-state error-state" hidden>
-            <h2>数据加载失败</h2>
-            <p id="errorMessage"></p>
-          </div>
-
+          <div id="cardGrid" class="case-grid" aria-live="polite"></div>
           <div class="load-more-wrap">
-            <button id="loadMoreButton" class="primary-button" type="button" hidden>加载更多</button>
+            <button id="loadMoreButton" class="primary-button" type="button" hidden>显示更多</button>
           </div>
-        </main>
-      </div>
+        </section>
+
+        <section id="emptyState" class="state-panel" hidden>
+          <strong>没有匹配结果</strong>
+          <span>调整搜索词或清空筛选后再看。</span>
+        </section>
+
+        <section id="errorState" class="state-panel error-state" hidden>
+          <strong>模式索引加载失败</strong>
+          <span id="errorMessage">请重新运行构建脚本后刷新页面。</span>
+        </section>
+      </main>
     </div>
 
     <noscript>这个页面需要启用 JavaScript。</noscript>

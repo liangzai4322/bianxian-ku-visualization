@@ -1,0 +1,567 @@
+:root {
+  --accent: #5645d4;
+  --accent-2: #f97316;
+  --canvas: #fbfaf8;
+  --surface: #ffffff;
+  --surface-2: #f3f0ff;
+  --text: #202124;
+  --muted: #6b625c;
+  --line: #e8e2d9;
+  --shadow: 0 10px 28px rgba(35, 31, 28, 0.08);
+  --radius: 8px;
+}
+
+.view-switch {
+  display: grid;
+  gap: 6px;
+  min-width: 130px;
+}
+
+.view-switch > span {
+  display: block;
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.view-mode-toggle {
+  display: grid;
+  gap: 2px;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 12px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+}
+
+.view-mode-toggle b {
+  font-size: 13px;
+}
+
+.view-mode-toggle small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.view-mode-toggle[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+}
+
+.merged-summary {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--category-color, var(--accent));
+  border-radius: var(--radius);
+  padding: 14px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.tools {
+  grid-template-columns: minmax(180px, 1.2fr) repeat(3, minmax(120px, 0.75fr)) minmax(130px, 0.65fr);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+  padding: 24px 18px;
+  border-right: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 92%, var(--canvas));
+}
+
+.brand-block {
+  padding: 4px 6px 20px;
+}
+
+.brand-block h1 {
+  margin: 8px 0 10px;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.brand-block p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.kicker,
+.toolbar-title p,
+.focus-strip p {
+  margin: 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.tree-root,
+.category-button,
+.subcategory-button {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.tree-root {
+  margin-bottom: 10px;
+  background: var(--surface-2);
+}
+
+.tree-root.active,
+.category-button.active,
+.subcategory-button.active {
+  border-color: color-mix(in srgb, var(--accent) 36%, transparent);
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+}
+
+.tree-root strong,
+.count {
+  min-width: 30px;
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-size: 12px;
+  text-align: center;
+}
+
+.category-group {
+  margin: 4px 0;
+}
+
+.category-button span {
+  font-weight: 750;
+}
+
+.subcategory-list {
+  display: grid;
+  gap: 3px;
+  padding: 2px 0 8px 12px;
+}
+
+.subcategory-button {
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.main {
+  min-width: 0;
+  padding: 28px;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(360px, 1.3fr);
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.toolbar-title h2 {
+  margin: 6px 0 0;
+  font-size: 28px;
+  line-height: 1.15;
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.2fr) repeat(3, minmax(120px, 0.8fr));
+  gap: 10px;
+}
+
+label span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.focus-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.focus-strip h3 {
+  margin: 3px 0 0;
+  font-size: 15px;
+}
+
+.focus-control {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.focus-control button,
+#clearButton,
+#loadMoreButton {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 9px 14px;
+  font-weight: 800;
+}
+
+.focus-control button.active,
+#loadMoreButton {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+}
+
+.result-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0 18px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.card-grid {
+  columns: 3 320px;
+  column-gap: 18px;
+}
+
+.case-card {
+  break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.case-card::before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, var(--category-color, var(--accent)), var(--accent-2));
+}
+
+.card-inner {
+  padding: 18px;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.pill {
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: color-mix(in srgb, var(--category-color, var(--accent)) 13%, var(--surface));
+  color: color-mix(in srgb, var(--category-color, var(--accent)) 82%, var(--text));
+  font-size: 12px;
+  font-weight: 850;
+  overflow-wrap: anywhere;
+}
+
+.date-pill {
+  color: var(--muted);
+  background: color-mix(in srgb, var(--muted) 12%, transparent);
+}
+
+.unknown-pill {
+  color: var(--muted);
+  background: color-mix(in srgb, var(--muted) 10%, transparent);
+}
+
+.case-title {
+  margin: 0 0 16px;
+  font-size: 21px;
+  line-height: 1.32;
+}
+
+.field-list {
+  display: grid;
+  gap: 11px;
+  margin: 0;
+}
+
+.field {
+  display: grid;
+  grid-template-columns: minmax(92px, 0.34fr) minmax(0, 0.66fr);
+  gap: 12px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--field-line);
+  border-left: 5px solid var(--field-color);
+  border-radius: var(--radius);
+  background: var(--field-bg);
+}
+
+.field.is-focused {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--field-color) 18%, transparent);
+}
+
+.field.is-dimmed {
+  opacity: 0.72;
+}
+
+.field dt {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  color: var(--field-color);
+  font-weight: 900;
+}
+
+.field dt small {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.field dd {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  justify-content: flex-start;
+  margin: 0;
+  color: var(--text);
+  font-weight: 750;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.field-token {
+  max-width: 100%;
+  border: 1px solid var(--token-line);
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: var(--token-color);
+  background: var(--token-bg);
+  overflow-wrap: anywhere;
+}
+
+.field-a {
+  --field-color: #0ea5e9;
+  --field-bg: color-mix(in srgb, #0ea5e9 8%, var(--surface));
+  --field-line: color-mix(in srgb, #0ea5e9 28%, transparent);
+}
+
+.field-b {
+  --field-color: #ef4444;
+  --field-bg: color-mix(in srgb, #ef4444 7%, var(--surface));
+  --field-line: color-mix(in srgb, #ef4444 25%, transparent);
+}
+
+.field-c {
+  --field-color: #8b5cf6;
+  --field-bg: color-mix(in srgb, #8b5cf6 8%, var(--surface));
+  --field-line: color-mix(in srgb, #8b5cf6 25%, transparent);
+}
+
+.field-d {
+  --field-color: #16a34a;
+  --field-bg: color-mix(in srgb, #16a34a 8%, var(--surface));
+  --field-line: color-mix(in srgb, #16a34a 25%, transparent);
+}
+
+.detail {
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  color: var(--muted);
+}
+
+.detail summary {
+  cursor: pointer;
+  font-weight: 850;
+}
+
+.detail p {
+  margin: 10px 0 0;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.empty-state {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 32px;
+  color: var(--muted);
+  background: var(--surface);
+  text-align: center;
+}
+
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 28px;
+}
+
+#loadMoreButton[hidden],
+.empty-state[hidden] {
+  display: none;
+}
+
+.theme-linear input,
+.theme-linear select,
+.theme-linear .sidebar,
+.theme-linear .focus-strip,
+.theme-linear .case-card,
+.theme-linear .empty-state {
+  background: var(--surface);
+}
+
+.theme-linear .case-title {
+  color: #ffffff;
+}
+
+.theme-linear .pill,
+.theme-linear .field-token {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+.theme-notion .case-card {
+  border-color: #e8e2d9;
+}
+
+.theme-notion .case-title {
+  font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+  font-weight: 800;
+}
+
+.theme-airtable .sidebar {
+  background: #ffffff;
+}
+
+@media (max-width: 980px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: relative;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .tools {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: 18px;
+  }
+
+  .tools {
+    grid-template-columns: 1fr;
+  }
+
+  .focus-strip {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .focus-control {
+    justify-content: flex-start;
+  }
+
+  .field {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 981px) {
+  .tools {
+    grid-template-columns: minmax(180px, 1.2fr) repeat(3, minmax(120px, 0.75fr)) minmax(130px, 0.65fr);
+  }
+}

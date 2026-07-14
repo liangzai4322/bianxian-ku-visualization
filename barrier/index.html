@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>壁垒库可视化</title>
+    <link rel="stylesheet" href="styles.css?v=20260706-viewmode" />
+    <script src="data.js?v=20260704-130112" defer></script>
+    <script src="app.js?v=20260706-viewmode" defer></script>
+  </head>
+  <body class="theme-linear">
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="分类导航">
+        <div class="brand-block">
+          <p class="kicker">Barrier Radar</p>
+          <h1>壁垒库</h1>
+          <p>按壁垒类型、建立周期和可攻破性判断防守质量。</p>
+        </div>
+        <button type="button" class="tree-root active" data-reset-filter>
+          <span>全部案例</span>
+          <strong id="totalCount">0</strong>
+        </button>
+        <div id="categoryTree" class="category-tree"></div>
+      </aside>
+
+      <main class="main">
+        <header class="toolbar">
+          <div class="toolbar-title">
+            <p>Linear Style</p>
+            <h2>竞争壁垒雷达</h2>
+          </div>
+          <div class="tools">
+            <label class="search-box">
+              <span>搜索</span>
+              <input id="searchInput" type="search" placeholder="输入案例、分类或核心字段" autocomplete="off" />
+            </label>
+            <label>
+              <span>大分类</span>
+              <select id="categoryFilter"></select>
+            </label>
+            <label>
+              <span>细分赛道</span>
+              <select id="subcategoryFilter"></select>
+            </label>
+            <label>
+              <span>时间</span>
+              <select id="sortSelect">
+                <option value="desc">最新在前</option>
+                <option value="asc">最旧在前</option>
+              </select>
+            </label>
+            <div class="view-switch" aria-label="视图模式">
+              <span>视图</span>
+              <button id="viewModeToggle" class="view-mode-toggle" type="button" aria-pressed="false">
+                <b data-mode-label>分组模式</b>
+                <small>切换合并</small>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <section class="focus-strip" aria-label="重点字段切换">
+          <div>
+            <p>Focus</p>
+            <h3>优先扫哪一列</h3>
+          </div>
+          <div id="focusControl" class="focus-control">
+            <button type="button" data-focus-field="壁垒类型">壁垒类型</button>
+            <button type="button" data-focus-field="壁垒描述">壁垒描述</button>
+            <button type="button" data-focus-field="建立周期">建立周期</button>
+            <button type="button" data-focus-field="可攻破性">可攻破性</button>
+          </div>
+        </section>
+
+        <section class="result-bar" aria-live="polite">
+          <span id="resultInfo">正在加载...</span>
+          <button type="button" id="clearButton">清空筛选</button>
+        </section>
+
+        <section id="cardGrid" class="card-grid" aria-label="案例卡片"></section>
+        <div id="emptyState" class="empty-state" hidden>没有匹配结果</div>
+        <div id="errorState" class="empty-state error-state" hidden>
+          <strong>数据加载失败</strong>
+          <p id="errorMessage"></p>
+        </div>
+        <div class="load-more-wrap">
+          <button type="button" id="loadMoreButton">加载更多</button>
+        </div>
+      </main>
+    </div>
+    <noscript>这个页面需要启用 JavaScript。</noscript>
+  </body>
+</html>
