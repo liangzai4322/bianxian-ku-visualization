@@ -21,6 +21,7 @@
     case: "barrier",
   });
   const matchLabels = Object.freeze({
+    "provided-entity-id": "已确认实体 ID",
     "relative-path-exact-title": "同源路径 · 标题一致",
     "relative-path-token-overlap": "同源路径 · 关键词匹配",
     "source-file-exact-title": "同名文件 · 标题一致",
