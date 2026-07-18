@@ -361,8 +361,16 @@ function buildCategoryFilter() {
 }
 
 function buildSubcategoryFilter() {
-  els.subcategoryFilter.replaceChildren(createOption("", "全部细分赛道"));
-  const categories = state.category ? [[state.category, state.categoryStats.get(state.category)]] : getSortedCategories();
+  els.subcategoryFilter.replaceChildren(createOption("", state.category ? "全部细分赛道" : "请先选择大分类"));
+  if (!state.category) {
+    els.subcategoryFilter.disabled = true;
+    els.subcategoryFilter.title = "选择大分类后可用";
+    return;
+  }
+
+  els.subcategoryFilter.disabled = false;
+  els.subcategoryFilter.title = "";
+  const categories = [[state.category, state.categoryStats.get(state.category)]];
   const seen = new Map();
   categories.forEach(([, stats]) => {
     if (!stats) return;

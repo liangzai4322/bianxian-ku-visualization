@@ -312,8 +312,6 @@ function buildCounts() {
     bucket.total += 1;
     bucket.subcategories.set(subcategory, (bucket.subcategories.get(subcategory) || 0) + 1);
   });
-  const firstCategory = [...state.counts.keys()].sort(localeSort)[0];
-  if (firstCategory) state.expandedCategories.add(firstCategory);
 }
 
 function assignCategoryColors() {
@@ -328,13 +326,18 @@ function buildFilters() {
 }
 
 function buildSubcategoryFilter() {
-  const names = new Set();
-  if (state.category && state.counts.has(state.category)) {
-    state.counts.get(state.category).subcategories.forEach((_, name) => names.add(name));
-  } else {
-    state.counts.forEach((bucket) => bucket.subcategories.forEach((_, name) => names.add(name)));
+  if (!state.category || !state.counts.has(state.category)) {
+    fillSelect(els.subcategoryFilter, [["", "请先选择大分类"]]);
+    els.subcategoryFilter.disabled = true;
+    els.subcategoryFilter.title = "选择大分类后可用";
+    return;
   }
+
+  const names = new Set();
+  state.counts.get(state.category).subcategories.forEach((_, name) => names.add(name));
   fillSelect(els.subcategoryFilter, [["", "全部细分赛道"], ...[...names].sort(localeSort).map((name) => [name, name])]);
+  els.subcategoryFilter.disabled = false;
+  els.subcategoryFilter.title = "";
   els.subcategoryFilter.value = state.subcategory;
 }
 
@@ -385,19 +388,21 @@ function renderCategoryTree() {
     button.append(createTextSpan(category, "category-name"), createBadge(bucket.total));
     group.append(button);
 
-    const list = document.createElement("div");
-    list.className = "subcategory-list";
-    [...bucket.subcategories.entries()].sort(([a], [b]) => localeSort(a, b)).forEach(([subcategory, count]) => {
-      const child = document.createElement("button");
-      child.type = "button";
-      child.className = "subcategory-button";
-      child.dataset.parentCategory = category;
-      child.dataset.subcategory = subcategory;
-      child.classList.toggle("active", state.category === category && state.subcategory === subcategory);
-      child.append(createTextSpan(subcategory, "subcategory-name"), createBadge(count));
-      list.append(child);
-    });
-    group.append(list);
+    if (state.expandedCategories.has(category)) {
+      const list = document.createElement("div");
+      list.className = "subcategory-list";
+      [...bucket.subcategories.entries()].sort(([a], [b]) => localeSort(a, b)).forEach(([subcategory, count]) => {
+        const child = document.createElement("button");
+        child.type = "button";
+        child.className = "subcategory-button";
+        child.dataset.parentCategory = category;
+        child.dataset.subcategory = subcategory;
+        child.classList.toggle("active", state.category === category && state.subcategory === subcategory);
+        child.append(createTextSpan(subcategory, "subcategory-name"), createBadge(count));
+        list.append(child);
+      });
+      group.append(list);
+    }
     fragment.append(group);
   });
   els.categoryTree.replaceChildren(fragment);

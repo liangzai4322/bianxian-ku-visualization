@@ -816,6 +816,8 @@ button.pattern-row,
 }
 
 .case-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 10px;

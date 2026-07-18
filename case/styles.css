@@ -305,6 +305,8 @@ select:focus {
 }
 
 .case-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 620px;
   break-inside: avoid;
   display: inline-block;
   width: 100%;

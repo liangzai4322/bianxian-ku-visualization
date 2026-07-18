@@ -400,6 +400,8 @@ select:focus {
 }
 
 .case-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 560px;
   display: inline-grid;
   gap: 11px;
   width: 100%;
